@@ -55,6 +55,7 @@ describe('Patient Controller', ()=>{
     });
   });
 
+  
   describe('fetch', () => {
     it('should fetch all patients', async () => {
       const mockPatients = [{ id: '1' }, { id: '2' }];
