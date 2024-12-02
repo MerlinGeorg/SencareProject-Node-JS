@@ -26,6 +26,7 @@ describe('Patient Controller', ()=>{
         jest.clearAllMocks()
     });
 
+
     describe('create', ()=>{
         it('should create a new patient', async() => {
             const mockPatient = { admission_number: '12345', save: jest.fn().mockResolvedValue({ id: 'newId' }) };
