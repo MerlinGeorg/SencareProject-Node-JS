@@ -1,4 +1,6 @@
 import Patient from "../model/patientModel.js";
+
+//add new patient
 export const create = async(req,res)=>{
     try{
         const patientData = new Patient(req.body);
@@ -14,6 +16,7 @@ export const create = async(req,res)=>{
     }
 }
 
+//list all patients
 export const fetch = async(req,res)=>{
     try{
         const patients = await Patient.find();
@@ -38,6 +41,38 @@ export const fetchPatientById = async(req,res)=>{
         return res.status(200).json(patient)
     }catch(error){
         return res.status(500).json({error: "Internal server error", details: error.message})
+    }
+}
+
+//update patient details by id
+export const updatePatient = async(req,res)=>{
+    try{
+        const id =req.params.id
+        const patientExists = await Patient.findOne({_id:id});
+        if(!patientExists){
+            return res.status(404).json({message: "Patient not found"})
+        }
+        const updatePatient = await Patient.findByIdAndUpdate(id,
+            req.body, {new: true}); //creates new record if record not found
+            res.status(201).json(updatePatient)
+    }catch(error){
+        return res.status(500).json({error: "Internal server error"})
+    }
+}
+
+
+//delete patient by id
+export const deletePatient = async(req,res)=>{
+    try{
+        const id = req.params.id
+        const patientExists = await Patient.findOne({_id:id})
+        if(!patientExists){
+            res.status(404).json({message: "Patient not found"})
+        }
+        await Patient.findByIdAndDelete(id);
+        res.status(201).json({message: "Patient deleted successfully"})
+    }catch(error){
+        return res.status(500).json({error:"Internal server error"})
     }
 }
 
