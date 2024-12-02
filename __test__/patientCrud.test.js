@@ -106,7 +106,7 @@ describe('Patient Controller', ()=>{
     });
   });
 
-  
+
   describe('updatePatient', () => {
     it('should update a patient', async () => {
       const mockUpdatedPatient = { id: 'patientId', name: 'Updated Name' };
@@ -136,6 +136,7 @@ describe('Patient Controller', ()=>{
     });
   });
 
+  
   describe('deletePatient', () => {
     it('should delete a patient', async () => {
       Patient.findOne.mockResolvedValue({ id: 'patientId' });
