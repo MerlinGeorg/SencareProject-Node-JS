@@ -55,7 +55,7 @@ describe('Patient Controller', ()=>{
     });
   });
 
-  
+
   describe('fetch', () => {
     it('should fetch all patients', async () => {
       const mockPatients = [{ id: '1' }, { id: '2' }];
@@ -77,6 +77,7 @@ describe('Patient Controller', ()=>{
       expect(res.json).toHaveBeenCalledWith({ message: 'Patient not found' });
     });
   });
+  
 
   describe('fetchPatientById', () => {
     it('should fetch a patient by id', async () => {
