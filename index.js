@@ -38,7 +38,7 @@ app.use("/api-docs", swaggerUi.serve,
 
 
 const port = 8080;
-const mongoURL = process.env.MONGO_URL;
+const mongoURL = "mongodb+srv://merlin123:merlin123@cluster0.hhbhj.mongodb.net/patients_db?retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose.connect(mongoURL).then(()=>{
  //   console.log(mongoURL);
