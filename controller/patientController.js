@@ -54,7 +54,7 @@ export const updatePatient = async(req,res)=>{
         }
         const updatePatient = await Patient.findByIdAndUpdate(id,
             req.body, {new: true}); //creates new record if record not found
-            res.status(201).json(updatePatient)
+          return res.status(200).json(updatePatient)
     }catch(error){
         return res.status(500).json({error: "Internal server error"})
     }
@@ -70,7 +70,7 @@ export const deletePatient = async(req,res)=>{
             res.status(404).json({message: "Patient not found"})
         }
         await Patient.findByIdAndDelete(id);
-        res.status(201).json({message: "Patient deleted successfully"})
+        return res.status(201).json({message: "Patient deleted successfully"})
     }catch(error){
         return res.status(500).json({error:"Internal server error"})
     }
