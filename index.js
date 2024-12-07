@@ -36,6 +36,10 @@ app.use("/api-docs", swaggerUi.serve,
     swaggerUi.setup(swaggerSpec)
 )
 
+//default route
+app.get("/", (req, res) => {
+    res.send("Welcome to the Patient API!");
+});
 
 const port = process.env.PORT || 8080;
 const mongoURL = process.env.MONGO_URL;
