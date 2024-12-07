@@ -321,4 +321,10 @@ route.get("/fetch/:id/clinical-data", fetchPatientClinicalData)
  */
 route.post("/create/:id/clinical-data", createMedicalRecord)
 
+//default route
+app.get("/", (req, res) => {
+    res.send("Welcome to the Patient API!");
+});
+
+
 export default route
