@@ -76,6 +76,7 @@ export const deletePatient = async(req,res)=>{
     }
 }
 
+
 //get patient's tests by id
 export const fetchPatientClinicalData = async(req,res)=>{
     try{
