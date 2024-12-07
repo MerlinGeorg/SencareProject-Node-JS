@@ -37,7 +37,7 @@ app.use("/api-docs", swaggerUi.serve,
 )
 
 
-const port = 8080;
+const port = process.env.PORT || 8080;
 const mongoURL = process.env.MONGO_URL;
 
 mongoose.connect(mongoURL).then(()=>{
