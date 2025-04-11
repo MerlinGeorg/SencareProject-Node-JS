@@ -122,3 +122,59 @@ export const createMedicalRecord = async(req,res)=>{
         return res.status(500).json({error: "Internal server error", details: error.message})
     }
 }
+
+
+export const editMedicalRecord = async (req, res) => {
+    try {
+        const patientId = req.params.id;
+        const clinicalDataId = req.body._id;
+        const updatedData = req.body;
+
+        if (!clinicalDataId) {
+            return res.status(400).json({ message: "Clinical data ID is required" });
+        }
+
+        // Find the patient
+        const patient = await Patient.findOne({ _id: patientId });
+
+        if (!patient) {
+            return res.status(404).json({ message: "Patient not found" });
+        }
+
+        // Prepare the update object
+        const updateObject = {};
+        if (updatedData.date_time) {
+            updateObject["clinical_data.$.date_time"] = updatedData.date_time;
+        }
+        if (updatedData.type_of_data) {
+            updateObject["clinical_data.$.type_of_data"] = updatedData.type_of_data;
+        }
+        if (updatedData.reading) {
+            updateObject["clinical_data.$.reading"] = updatedData.reading;
+        }
+        if (updatedData.unit) {
+            updateObject["clinical_data.$.unit"] = updatedData.unit;
+        }
+
+        // Find and update the specific clinical data entry in the array
+        const result = await Patient.findOneAndUpdate(
+            { _id: patientId, "clinical_data._id": clinicalDataId },
+            {
+                $set: updateObject,
+            },
+            { new: true }
+        );
+
+        if (!result) {
+            return res.status(404).json({ message: "Patient or clinical data not found" });
+        }
+
+        return res.status(200).json({
+            message: "Clinical data updated successfully",
+            updatedClinicalData: result.clinical_data,
+        });
+
+    } catch (error) {
+        return res.status(500).json({ error: "Internal server error", details: error.message });
+    }
+};

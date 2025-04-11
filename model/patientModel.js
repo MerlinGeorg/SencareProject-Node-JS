@@ -42,6 +42,9 @@ const patientSchema = new mongoose.Schema({
     reading: {
       type: String,
     },
+    unit: {
+      type: String,
+    }
   }],
 });
 export default mongoose.model("patients", patientSchema); //uses patients table

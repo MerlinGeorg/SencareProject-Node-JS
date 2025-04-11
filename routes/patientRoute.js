@@ -1,6 +1,6 @@
 import express from "express";
 import { fetch,create, fetchPatientById, fetchPatientClinicalData, 
-    createMedicalRecord, deletePatient, updatePatient } from "../controller/patientController.js";
+    createMedicalRecord, deletePatient, updatePatient, editMedicalRecord } from "../controller/patientController.js";
 
 const route = express.Router();
 
@@ -321,7 +321,7 @@ route.get("/fetch/:id/clinical-data", fetchPatientClinicalData)
  */
 route.post("/create/:id/clinical-data", createMedicalRecord)
 
-
+route.patch("/update/:id/clinical-data", editMedicalRecord)
 
 
 export default route
