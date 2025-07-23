@@ -5,10 +5,18 @@ import bodyParser from "body-parser";
 import route from "./routes/patientRoute.js"
 import swaggerJsdoc from "swagger-jsdoc"; //for converting the comments in the code to meaningful ui
 import swaggerUi from "swagger-ui-express"; //for creating swagger ui for our api
+// import cors from 'cors';
+//import helmet from 'helmet';
+//import mongoSanitize from "express-mongo-sanitize";
+import xss from 'xss-clean'
 
 const app = express();
 app.use(bodyParser.json()); //intercepter
 dotenv.config();
+//app.use(helmet());
+// app.use(cors)
+// app.use(mongoSanitize())
+app.use(xss())
 
 const swaggerDefinition = {
     openapi: "3.0.0",
