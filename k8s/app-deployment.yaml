@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sencare-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sencare-app
+  template:
+    metadata:
+      labels:
+        app: sencare-app
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: sencare-app
+          image: merlingeo/sencare-app:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PORT
+              value: "5000"
+            - name: MONGO_URL
+              value: "mongodb://mongo:27017/patients_db"
+          resources:
+            requests:
+              cpu: "100m"
+
