@@ -1,4 +1,10 @@
+import redis from 'redis';
 import Patient from "../model/patientModel.js";
+
+const client = redis.createClient({
+    url: 'redis://redis-master:6379'
+});
+client.connect();
 
 //add new patient
 export const create = async(req,res)=>{
@@ -10,6 +16,7 @@ export const create = async(req,res)=>{
             return res.status(400).json({message: "Patient already exists"})
         }
         const savedPatient = await patientData.save();
+        await client.del(`patient:${id}`);
         return res.status(200).json(savedPatient)
     }catch(error){
         return res.status(500).json({error: "Internal server error", details: error.message})
@@ -31,12 +38,24 @@ export const fetch = async(req,res)=>{
 
 //get patient by id
 export const fetchPatientById = async(req,res)=>{
+    const id =req.params.id
     try{
-        const id =req.params.id
-        const patient = await Patient.findOne({_id:id});
+        // Check Redis cache first
+        const cachedPatient = await client.get(`patient:${id}`);
+        if(cachedPatient){
+            console.log('cache hit');
+            return res.status(200).json(JSON.parse(cachedPatient));
+        }
+
+        console.log('Cache miss');
+
+        const patient = await Patient.findById({_id:id});
         if(!patient){
             return res.status(400).json({message: "Patient not found"})
         }
+
+        await client.setEx(`patient:${id}`, 3600, JSON.stringify(patient))
+
         res.setHeader('Content-Type', 'application/json');
         return res.status(200).json(patient)
     }catch(error){
@@ -54,6 +73,9 @@ export const updatePatient = async(req,res)=>{
         }
         const updatePatient = await Patient.findByIdAndUpdate(id,
             req.body, {new: true}); //creates new record if record not found
+        
+        await client.del(`patient:${id}`);
+
           return res.status(200).json(updatePatient)
     }catch(error){
         return res.status(500).json({error: "Internal server error"})
@@ -70,6 +92,7 @@ export const deletePatient = async(req,res)=>{
             res.status(404).json({message: "Patient not found"})
         }
         await Patient.findByIdAndDelete(id);
+        await client.del(`patient:${id}`);
         return res.status(201).json({message: "Patient deleted successfully"})
     }catch(error){
         return res.status(500).json({error:"Internal server error"})
@@ -113,7 +136,8 @@ export const createMedicalRecord = async(req,res)=>{
                 },
                 { new: true } // return the updated patient
             );
-            res.status(201).json(updatedPatient)
+            await client.del(`patient:${id}`);
+            return res.status(201).json(updatedPatient)
         } else {
             return res.status(400).json({message: "Patient does not exists"})
         }
@@ -168,6 +192,7 @@ export const editMedicalRecord = async (req, res) => {
         if (!result) {
             return res.status(404).json({ message: "Patient or clinical data not found" });
         }
+        await client.del(`patient:${id}`);
 
         return res.status(200).json({
             message: "Clinical data updated successfully",

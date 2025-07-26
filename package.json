@@ -21,6 +21,7 @@
     "mongodb": "^6.10.0",
     "mongoose": "^8.7.2",
     "nodemon": "^3.1.7",
+    "redis": "^5.6.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "xss-clean": "^0.1.4"

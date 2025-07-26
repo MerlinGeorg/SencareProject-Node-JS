@@ -8,7 +8,7 @@ import swaggerUi from "swagger-ui-express"; //for creating swagger ui for our ap
 // import cors from 'cors';
 //import helmet from 'helmet';
 //import mongoSanitize from "express-mongo-sanitize";
-import xss from 'xss-clean'
+import xss from 'xss-clean';
 
 const app = express();
 app.use(bodyParser.json()); //intercepter
